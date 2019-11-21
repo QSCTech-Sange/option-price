@@ -1,2 +1,8 @@
-# option-value
-Awesome Option Price Calculator https://qsctech-sange.github.io/option-value.html
+# option-price
+option-price is a Python-based powerful but simple option price calculator.
+
+# Installation
+```shell
+pip install option-price
+```
+# Usage
