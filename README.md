@@ -6,3 +6,6 @@ option-price is a Python-based powerful but simple option price calculator.
 pip install option-price
 ```
 # Usage
+```python
+from optionprice import Option
+```

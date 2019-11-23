@@ -1,7 +1,3 @@
-import scipy.stats as sps
-import numpy as np
-
-
 class Option:
 
     # european 为 欧式期权 (False 为欧式期权)
