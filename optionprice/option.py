@@ -1,3 +1,6 @@
+import scipy.stats as sps
+import numpy as np
+
 class Option:
 
     # european 为 欧式期权 (True 为欧式期权)
@@ -8,7 +11,7 @@ class Option:
     # r 适用的无风险利率，连续复利
     # sigma 适用的波动率，
     # dv 股利信息，连续复利
-    def __init__(self, european=False, kind=1, s0=0, k=0, t=0, r=0, sigma=0, dv=0):
+    def __init__(self, european=False, kind=1, s0=100, k=80, t=60, r=0.05, sigma=0.01, dv=0):
         self.european = european
         self.kind = kind
         self.s0 = s0
@@ -80,5 +83,8 @@ class Option:
                         temp = np.max([temp, (compare - self.k) * self.kind])
                     newtree.append(temp)
                 tree = newtree
-            self.btprice = tree[0]
-            print(self.price['Binary Tree'])
+            self.price['Binary Tree'] = tree[0]
+            print(self.price['Binary Tree'])   
+       
+        else:
+            print("Supported method parameters are BSM, MC, BT")
