@@ -16,10 +16,10 @@ class Option:
         self.kind = kind
         self.s0 = s0
         self.k = k
-        self.t = t /365
-        self.sigma = sigma
-        self.r = r
-        self.dv = dv
+        self.t = t / 365
+        self.sigma = sigma * 100
+        self.r = r * 100
+        self.dv = dv * 100
         self.bsprice = "Uncounted"
         self.mcprice = "Uncounted"
         self.btprice = "Uncounted"
