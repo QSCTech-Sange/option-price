@@ -1,5 +1,5 @@
 # option-price
-option-price is a Python-based powerful but simple option price calculator.
+`option-price` is a Python-based powerful but simple option price calculator. A GUI version is available [here](https://github.com/QSCTech-Sange/Options-Calculator).
 
 # Installation
 ```shell
@@ -10,29 +10,30 @@ pip install option-price
 from optionprice import Option
 ```
 
-You can initialize an option through this:
+An option can be initialized by:
 ```
 some_option = Option(european=False,
-                    kind = 1,
-                    s0 = 100,
+                    kind=1,
+                    s0=100,
                     k=120,
                     t=45,
                     sigma=0.01,
-                    r=0.05
-                    dv = 0)
+                    r=0.05,
+                    dv=0)
 ```
 
 `option-price` has three approaches to calculate the price of the price of the option. They are
 + B-S-M
 + Monte Carlo
-+ Binary Tree
++ Binomial Tree
 
-`option-price` will pick B-S-M by default. You can simply get the price by using
+`option-price` will choose B-S-M algorithm by default. Prices can be simply calculated by
+
 ```python
 some_option.getPrice()
 ```
 
-If you want to calculate in other ways, you can use
+Other methods of calculation are available by adding some parameters. For instance,
 ```python
 some_option.getPrice(method='MC',iteration = 500000)
 ```
@@ -43,4 +44,6 @@ or
 some_option.getPrice(method='BT',iteration = 1000)
 ```
 
-while MC stands for Monte Carlo and BT stands for Binary Tree.
+while MC stands for Monte Carlo and BT stands for Binomial Tree. 
+
+The iteration has a default value 500. Note that the larger the value, the slower and more precise the price.
