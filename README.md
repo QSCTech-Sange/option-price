@@ -1,5 +1,9 @@
 # option-price
+<<<<<<< HEAD
 `option-price` is a Python-based powerful but simple option price calculator. A GUI version is available [here](https://github.com/QSCTech-Sange/Options-Calculator).
+=======
+option-price is a Python-based powerful but simple option price calculator. A GUI version is available [here](https://github.com/QSCTech-Sange/Options-Calculator).
+>>>>>>> master
 
 # Installation
 ```shell
