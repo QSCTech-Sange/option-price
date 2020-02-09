@@ -55,7 +55,7 @@ class Option:
             p = (np.exp((self.r - self.dv) * delta) - d) / (u - d)
             
             tree = np.arange(0,iteration * 2 + 2,2,dtype=np.float128)
-            tree[iteration//2 + 1:] = tree[:iteration//2][::-1]
+            tree[iteration//2 + 1:] = tree[:(iteration+1)//2][::-1]
             np.multiply(tree,-1,out=tree)
             np.add(tree,iteration,out=tree)
             np.power(u,tree[:iteration//2],out=tree[:iteration//2])
