@@ -25,7 +25,7 @@ class Option:
         self.btprice = "Uncounted"
         self.price = {'B-S-M':'Uncounted','Monte Carlo':'Uncounted','Binomial Tree':'Uncounted'}
 
-    def getPrice(self,method="BSM",iteration = 500):
+    def getPrice(self,method="BSM",iteration = 5000):
         if method.upper() == "BSM" or method.upper() == "B-S-M":
             if self.european or self.kind == 1:
                 d_1 = (np.log(self.s0 / self.k) + (
