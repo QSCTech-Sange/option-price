@@ -3,14 +3,18 @@ import numpy as np
 
 class Option:
 
-    # european 为 欧式期权 (True 为欧式期权)
-    # kind 看涨或看跌（Put 为 -1 , Call 为 1）
-    # s0 标的资产现价
-    # k 期权执行价
-    # t 期权到期时间 - 现在时间,以天计
-    # r 适用的无风险利率，连续复利
-    # sigma 适用的波动率，
-    # dv 股利信息，连续复利
+    """
+    function: initialize an option
+    :parm european: True if the option is an European option and False if it's an American one.
+    :parm kind: 1 for call option while -1 for put option. Other number are not valid.
+    :parm s0: initial price
+    :parm k: strike price
+    :parm t: length of option in days
+    :parm sigma: volatility of stock
+    :parm r: risk free interest rate per annu
+    :parm dv: dividend rate. 0 for non-stock option, which is also the default
+    :return Option
+    """
     def __init__(self, european=False, kind=1, s0=100, k=80, t=60, r=0.05, sigma=0.01, dv=0):
         self.european = european
         self.kind = kind
@@ -20,11 +24,13 @@ class Option:
         self.sigma = sigma * 100
         self.r = r * 100
         self.dv = dv * 100
-        self.bsprice = "Uncounted"
-        self.mcprice = "Uncounted"
-        self.btprice = "Uncounted"
-        self.price = {'B-S-M':'Uncounted','Monte Carlo':'Uncounted','Binomial Tree':'Uncounted'}
-
+    
+    """
+    function: calculate the option price
+    :parm method: indicate which method should be used to calculate.It can be one of "BSM","BT" and "MC".
+    :parm iteration: the iteration times for "BT" and "MC"
+    :return price
+    """
     def getPrice(self,method="BSM",iteration = 5000):
         if method.upper() == "BSM" or method.upper() == "B-S-M":
             if self.european or self.kind == 1:
@@ -32,21 +38,17 @@ class Option:
                         self.r - self.dv + .5 * self.sigma ** 2) * self.t) / self.sigma / np.sqrt(
                     self.t)
                 d_2 = d_1 - self.sigma * np.sqrt(self.t)
-                self.price['B-S-M'] = self.kind * self.s0 * np.exp(-self.dv * self.t) * sps.norm.cdf(
+                return self.kind * self.s0 * np.exp(-self.dv * self.t) * sps.norm.cdf(
                     self.kind * d_1) - self.kind * self.k * np.exp(-self.r * self.t) * sps.norm.cdf(self.kind * d_2)
-            else:
-                self.price['B-S-M'] = "Please use binary tree to calculate American call option."
-            print(self.price['B-S-M'])
+
 
         elif method.upper() == "MC" or method.upper() == "Monte Carlo":
             if self.european or self.kind == 1:
                 zt = np.random.normal(0, 1, iteration)
                 st = self.s0 * np.exp((self.r - self.dv - .5 * self.sigma ** 2) * self.t + self.sigma * self.t ** .5 * zt)
                 st = np.maximum(self.kind * (st - self.k), 0)
-                self.price['Monte Carlo'] = np.average(st) * np.exp(-self.r * self.t)
-            else:
-                self.price['Monte Carlo'] = "Please use binary tree to calculate American call option."
-            print(self.price['Monte Carlo'])
+                return np.average(st) * np.exp(-self.r * self.t)
+
 
         elif method.upper() == "BT" or method.upper() == "Binomial Tree":
             delta = self.t / iteration
@@ -74,8 +76,20 @@ class Option:
                     np.multiply(compare,self.kind,out=compare)
                     np.maximum(newtree, compare,out=newtree)
                 tree = newtree
-            
-            self.price['Binomial Tree'] = tree[0]
-            print(self.price['Binomial Tree'])
-        else:
-            print("Supported method parameters are BSM, MC, BT")
+
+            return tree[0]
+
+
+if __name__=='__main__':
+    a = Option(european=False,
+                    kind=1,
+                    s0=100,
+                    k=120,
+                    t=45,
+                    sigma=0.01,
+                    r=0.05,
+                    dv=0)
+    
+    print(a.getPrice())
+    print(a.getPrice(method='MC',iteration = 500000))
+    print(a.getPrice(method='BT',iteration = 1000))
