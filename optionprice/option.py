@@ -5,26 +5,36 @@ class Option:
 
     """
     function: initialize an option
-    :parm european: True if the option is an European option and False if it's an American one.
-    :parm kind: 1 for call option while -1 for put option. Other number are not valid.
+    :parm european: True if the option is an European option and False if it's an American one
+    :parm kind: 1 for call option while -1 for put option. Other number are not valid
     :parm s0: initial price
     :parm k: strike price
-    :parm t: length of option in days
     :parm sigma: volatility of stock
     :parm r: risk free interest rate per annu
-    :parm dv: dividend rate. 0 for non-stock option, which is also the default
+    :[optional]parm dv: dividend rate. 0 for non-stock option, which is also the default
+    :[optional]parm start: beginning date of the option, string like '2008-02-14',default today
+    :[optional]parm end: end date of the option, string like '2008-02-14',default today plus param t
+    :[optional]param t: time of the option in days
+    :Note that if start,end and t are all given, then t will choose the difference between end and start
+    :Note that either t or (start and end) should exists
     :return Option
     """
-    def __init__(self, european=False, kind=1, s0=100, k=80, t=60, r=0.05, sigma=0.01, dv=0):
+    def __init__(self, european, kind, s0, k, r, sigma, dv=0, t=None, start=None, end=None):
+        if t is None and (start is None or end is None):
+            raise AttributeError("Either t or (start and end) must be given.")
+        if kind.lower() not in ["call","put"]:
+            raise AttributeError("attribute kind should be either put or call.")
         self.european = european
-        self.kind = kind
+        self.kind = 1 if kind.lower() == 'call' else -1
         self.s0 = s0
         self.k = k
-        self.t = t / 365
-        self.sigma = sigma * 100
-        self.r = r * 100
-        self.dv = dv * 100
-    
+        self.sigma = sigma
+        self.r = r 
+        self.dv = dv
+        self.start = np.datetime64(start,'D') if start else np.datetime64('today', 'D') 
+        self.end = np.datetime64(end,'D') if end else np.datetime64('today', 'D') + np.timedelta64(t,'D')
+        self.t = (self.end - self.start).astype(int) / 365
+
     """
     function: calculate the option price
     :parm method: indicate which method should be used to calculate.It can be one of "BSM","BT" and "MC".
@@ -79,17 +89,33 @@ class Option:
 
             return tree[0]
 
+    def __repr__(self):
+        info = "{:<16}{}".format("Type:","European" if self.european else "American")
+        info += "\n{:<16}{}".format("Kind:","call" if self.kind == 1 else "put")
+        info += "\n{:<16}{}".format("Price initial:",self.s0)
+        info += "\n{:<16}{}".format("Price strike:",self.k)
+        info += "\n{:<16}{}".format("Volatility:",str(self.sigma*100)+"%")
+        info += "\n{:<16}{}".format("Risk free rate:",str(self.r*100)+"%")
+        if self.dv != 0:
+            info += "\n{:<16}{}".format("Dividend rate:",str(self.dv*100)+"%")
+        info += "\n{:<16}{}".format("Start Date:",self.start)
+        info += "\n{:<16}{}".format("Expire Date:",self.end)
+        info += "\n{:<16}{}".format("Time span:",str(self.t * 365) + " days")
+        return info
+
+    def __str__(self):
+        return self.__repr__()
 
 if __name__=='__main__':
-    a = Option(european=False,
-                    kind=1,
-                    s0=100,
+    a = Option(european=True,
+                    kind='put',
+                    s0=80,
                     k=120,
-                    t=45,
+                    t=31,
                     sigma=0.01,
                     r=0.05,
                     dv=0)
-    
+    print(a)
     print(a.getPrice())
     print(a.getPrice(method='MC',iteration = 500000))
     print(a.getPrice(method='BT',iteration = 1000))
