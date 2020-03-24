@@ -47,7 +47,7 @@ print(some_option)
 
 which will print out the option’s info.
 
-```python
+```reStructuredText
 Type:           European
 Kind:           call
 Price initial:  80
@@ -69,10 +69,10 @@ Name | Type |  Definition
 **k** | int | strike price 
 **sigma** | float | volatility of stock 
 **r** | float | risk free interest rate per annum 
-**[optional]dv** | float | dividend rate. 0 for non-stock option, which is also the default 
-**[optional]t** | int | length of option in days 
-**[optional]start** | str | beginning date of the option, string like '2008-02-14',default today 
-**[optional]end** | str | end date of the option, string like '2008-02-14',default today plus param t 
+[optional] **dv** | float | dividend rate. 0 for non-stock option, which is also the default 
+[optional] **t** | int | length of option in days 
+[optional] **start** | str | beginning date of the option, string like '2008-02-14',default today 
+[optional] **end** | str | end date of the option, string like '2008-02-14',default today plus param t 
 
 Note that if start,end and t are all given, then t will choose the difference between end and start
 
