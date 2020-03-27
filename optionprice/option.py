@@ -21,9 +21,21 @@ class Option:
     """
     def __init__(self, european, kind, s0, k, r, sigma, dv=0, t=None, start=None, end=None):
         if t is None and (start is None or end is None):
-            raise AttributeError("Either t or (start and end) must be given.")
+            raise TypeError("Either t or (start and end) must be given.")
         if kind.lower() not in ["call","put"]:
-            raise AttributeError("attribute kind should be either put or call.")
+            raise TypeError("kind should be either put or call.")
+        if not isinstance(european,bool):
+            raise TypeError("european should be either True or False")
+        if not isinstance(s0,(int, float)):
+            raise TypeError("s0 should be either True or False")
+        if not isinstance(k,(int, float)):
+            raise TypeError("k should be either True or False")
+        if not isinstance(r,(int, float)):
+            raise TypeError("r should be either True or False")
+        if not isinstance(sigma,(int, float)):
+            raise TypeError("sigma should be either True or False")
+        if not isinstance(dv,(int, float)):
+            raise TypeError("dv should be either True or False")
         self.european = european
         self.kind = 1 if kind.lower() == 'call' else -1
         self.s0 = s0
