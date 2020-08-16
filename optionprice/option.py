@@ -78,7 +78,7 @@ class Option:
             d = 1 / u
             p = (np.exp((self.r - self.dv) * delta) - d) / (u - d)
             
-            tree = np.arange(0,iteration * 2 + 2,2,dtype=np.float128)
+            tree = np.arange(0,iteration * 2 + 2,2,dtype=np.float)
             tree[iteration//2 + 1:] = tree[:(iteration+1)//2][::-1]
             np.multiply(tree,-1,out=tree)
             np.add(tree,iteration,out=tree)
@@ -90,7 +90,7 @@ class Option:
                 newtree = tree[:-1] * p + tree[1:] * (1 - p)
                 newtree = newtree * np.exp(-self.r * delta)
                 if not self.european:
-                    compare = np.abs(iteration - j - 1 - np.arange(tree.size - 1) * 2).astype(np.float128)
+                    compare = np.abs(iteration - j - 1 - np.arange(tree.size - 1) * 2).astype(np.float)
                     np.power(u,compare[:len(compare)//2],out=compare[:len(compare)//2])
                     np.power(d,compare[len(compare)//2:],out=compare[len(compare)//2:])
                     np.multiply(self.s0,compare,out=compare)
@@ -112,7 +112,7 @@ class Option:
             info += "\n{:<16}{}".format("Dividend rate:",str(self.dv*100)+"%")
         info += "\n{:<16}{}".format("Start Date:",self.start)
         info += "\n{:<16}{}".format("Expire Date:",self.end)
-        info += "\n{:<16}{}".format("Time span:",str(self.t * 365) + " days")
+        info += "\n{:<16}{}".format("Time span:",str(int(self.t * 365)) + " days")
         return info
 
     def __str__(self):
@@ -120,13 +120,13 @@ class Option:
 
 if __name__=='__main__':
     a = Option(european=True,
-                    kind='put',
-                    s0=80,
-                    k=120,
-                    t=31,
-                    sigma=0.01,
-                    r=0.05,
-                    dv=0)
+                kind='put',
+                s0=100,
+                k=120,
+                t=45,
+                sigma=0.01,
+                r=0.05,
+                dv=0)
     print(a)
     print(a.getPrice())
     print(a.getPrice(method='MC',iteration = 500000))

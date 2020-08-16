@@ -17,7 +17,7 @@ from optionprice import Option
 An option can be initialized by:
 ```python
 some_option = Option(european=True,
-                    kind='call',
+                    kind='put',
                     s0=100,
                     k=120,
                     t=45,
@@ -29,13 +29,13 @@ Or
 
 ```python
 some_option = Option(european=False,
-                    kind='put',
-                    s0=100,
-                    k=120,
+                    kind='call',
+                    s0=120,
+                    k=100,
                     sigma=0.01,
                     r=0.05,
-                    start='2008-2-14'
-                    end='2008-3-14'
+                    start='2008-2-14'，
+                    end='2008-3-14'，
                     dv=0)
 ```
 
